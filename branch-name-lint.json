@@ -1,0 +1,6 @@
+{
+  "branchNameLinter": {
+    "prefixes": ["feat", "fix", "hotfix", "chore"],
+    "separator": "/"
+  }
+}

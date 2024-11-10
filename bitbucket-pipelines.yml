@@ -1,0 +1,47 @@
+image: docker:18.09.7-dind
+
+definitions:
+  steps:
+    - step: &build-push-image-frontend
+        name: Build push Docker image frontend
+        image: openjdk:8-jdk-alpine
+        script:
+          - apk add --no-cache python3 py3-pip && pip3 install --upgrade pip && pip3 install awscli && rm -rf /var/cache/apk/*
+          - aws configure set aws_access_key_id "${AWS_KEY}"
+          - aws configure set aws_secret_access_key "${AWS_SECRET}"
+          - aws configure set region "${REGION}"
+          - eval $(aws ecr get-login --no-include-email --region ap-southeast-1 | sed 's;https://;;g')
+          - docker build . -f ./Docker/Dockerfile -t ${REGISTRY}:frontend-${BITBUCKET_BRANCH}-${BITBUCKET_COMMIT} --no-cache
+          - docker push ${REGISTRY}:frontend-${BITBUCKET_BRANCH}-${BITBUCKET_COMMIT}
+        services:
+          - docker 
+    - step: &deploy-to-eks
+        name: Deploy to develop
+        image: alpine/helm:3.8.2
+        deployment: develop
+        script:
+          - apk add --no-cache python3 py3-pip && pip3 install --upgrade pip && pip3 install awscli && apk add --no-cache curl git && rm -rf /var/cache/apk/*
+          - aws configure set aws_access_key_id "${AWS_KEY}"
+          - aws configure set aws_secret_access_key "${AWS_SECRET}"
+          - aws configure set region "${REGION}"
+          - aws eks  update-kubeconfig --name "${CLUSTER_NAME}"
+          - git clone -b ${BRANCH} https://${GIT_USER}:${GIT_PASSWORD}@bitbucket.org/pnjsd/tms-devops.git
+          - helm upgrade --install -n tms-${VALUES} --set image="${REGISTRY}:frontend-${BITBUCKET_BRANCH}-${BITBUCKET_COMMIT}" tms-frontend-deployment ./tms-devops/frontend -f ./tms-devops/frontend/custom-values.${VALUES}.yaml
+pipelines:
+  branches:
+    develop:
+      - step: *build-push-image-frontend
+      - step: *deploy-to-eks
+    staging:
+      - step: *build-push-image-frontend
+      - step: 
+          <<: *deploy-to-eks
+          name: Deploy to staging
+          deployment: Staging
+    # master:
+    #   - step: *build-push-image-tms-frontend
+    #   - step: *build-push-image-user
+    #   - step: 
+    #       <<: *deploy-to-eks
+    #       name: Deploy to prod
+    #       deployment: Production

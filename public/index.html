@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" id="favicon" href="%PUBLIC_URL%/eplus-favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <meta name="Content-Security-Policy" content="script-src 'self' https://sp.zalo.me;"> -->
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Trang thông tin tuyển dụng ECO & Eplus" />
+    <meta property="og:locale" content="vi_VN" />
+    <meta property="og:type" content="article" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/eplus-favicon.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title id="page-title">Eplus Công ty Cổ phần Eplus Research</title>
+    <script src="https://www.google.com/recaptcha/api.js?render=6LfETQcqAAAAAAHZyi5xJPJcP9rcoQdaPdBtcqfU"></script>
+    <script src="https://sp.zalo.me/plugins/sdk.js"></script>
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+
+    <div
+      class="zalo-chat-widget"
+      data-oaid="2706971858922086998"
+      data-welcome-message="Rất vui khi được hỗ trợ bạn!"
+      data-autopopup="0"
+      data-width="280"
+      data-height="350"
+    ></div>
+    <!-- <div
+      className="zalo-share-button"
+      data-oaid="2706971858922086998"
+      data-share-type="1"
+      data-layout="2"
+      data-color="blue"
+      data-customize="true"
+    ></div> -->
+
+    <script>
+      (function () {
+        var domain = window.location.hostname;
+        var favicon = document.getElementById('favicon');
+        var appleTouchIcon = document.querySelector(
+          'link[rel="apple-touch-icon"]'
+        );
+        var pageTitle = document.getElementById('page-title');
+
+        if (domain.includes('ecopharma')) {
+          favicon.href = '%PUBLIC_URL%/eco-favicon.jpg';
+          appleTouchIcon.href = '%PUBLIC_URL%/eco-favicon.png';
+          pageTitle.textContent = 'ECO - Công ty Cổ phần Dược phẩm ECO';
+        } else {
+          favicon.href = '%PUBLIC_URL%/eplus-favicon.png';
+          appleTouchIcon.href = '%PUBLIC_URL%/eplus-favicon.png';
+          pageTitle.textContent = 'Eplus Công ty Cổ phần Eplus Research';
+        }
+      })();
+
+      // if (navigator.userAgent.indexOf('Firefox') != -1) {
+      //   document.documentElement.classList.add('firefox');
+      //   // alert('firefox');
+      // } else if (navigator.userAgent.indexOf('Chrome') != -1) {
+      //   document.documentElement.classList.add('chrome');
+      //   // alert('chrome');
+      // }
+    </script>
+  </body>
+</html>

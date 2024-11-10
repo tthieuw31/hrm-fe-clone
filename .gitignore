@@ -1,0 +1,8 @@
+.DS_Store
+node_modules
+build
+node_modules
+.env
+.github/workflows/dev-action.yml
+.github/workflows/staging-action.yml
+.github/workflows/production-action.yml
